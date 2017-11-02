@@ -207,7 +207,7 @@ export default {
       this.$emit('options', this.list)
     },
     toggle () {
-      if (this.disabled && !this.show) return;
+      if ((this.disabled && !this.show) || !this.$refs.btn) return;
       this.show = !this.show
       if (!this.show) this.$refs.btn.focus()
     },
