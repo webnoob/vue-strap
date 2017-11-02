@@ -1,16 +1,14 @@
 <template>
-  <doc-section id="typeahead" name="***Typeahead">
+  <doc-section id="typeahead" name="Typeahead">
     <div class="bs-example">
-      Typeahead failing.
-      <!--
       <h4>Static arrays</h4>
       <typeahead :data="USstate" placeholder="USA states"></typeahead>
       <hr>
       <h4>
-      Asynchronous results
-      <tooltip trigger="click" content="The suggestions via a Google Map API, are you behind a FireWall?" placement="top">
-        <small style="cursor:pointer">(not working?)</small>
-      </tooltip>
+        Asynchronous results
+        <tooltip trigger="click" content="The suggestions via a Google Map API, are you behind a FireWall?" placement="top">
+          <small style="cursor:pointer">(not working?)</small>
+        </tooltip>
       </h4>
       <typeahead
         placeholder="CCCAddress, async via maps.googleapis.com"
@@ -20,9 +18,7 @@
         :on-hit="googleCallback"
       ></typeahead>
       <hr>
-      <h4>
-      Custom templates for results
-      </h4>
+      <h4>Custom templates for results</h4>
       <typeahead
         placeholder="Github users, async via api.github.com"
         async-key="items"
@@ -30,32 +26,28 @@
         :template="githubTemplate"
         :on-hit="githubCallback"
       ></typeahead>
-      -->
     </div>
     <doc-code language="markup">
       &lt;h4>Static arrays&lt;/h4>
-      &lt;typeahead
-        :data="USstate"
-        placeholder="USA states">
-      &lt;/typeahead>
+      &lt;typeahead :data="USstate" placeholder="USA states">&lt;/typeahead>
 
       &lt;h4>Asynchronous results&lt;/h4>
-        &lt;typeahead
-          placeholder="Address, async via maps.googleapis.com"
-          async-key="results"
-          src="https://maps.googleapis.com/maps/api/geocode/json?address="
-          :template="asyncTemplate"
-          :on-hit="googleCallback">
-      &lt;/typeahead>
+      &lt;typeahead
+        placeholder="Address, async via maps.googleapis.com"
+        async-key="results"
+        src="https://maps.googleapis.com/maps/api/geocode/json?address="
+        :template="asyncTemplate"
+        :on-hit="googleCallback"
+      >&lt;/typeahead>
 
       &lt;h4>Custom templates for results&lt;/h4>
-        &lt;typeahead
-          placeholder="Github users, async via api.github.com"
-          async-key="items"
-          src="https://api.github.com/search/users?q="
-          :template="githubTemplate"
-          :on-hit="githubCallback">
-      &lt;/typeahead>
+      &lt;typeahead
+        placeholder="Github users, async via api.github.com"
+        async-key="items"
+        src="https://api.github.com/search/users?q="
+        :template="githubTemplate"
+        :on-hit="githubCallback"
+      >&lt;/typeahead>
     </doc-code>
     <doc-code language="javascript">
       new Vue {
@@ -66,17 +58,16 @@
           return {
             USstate: ['Alabama', 'Alaska', 'Arizona',...],
             asynchronous: '{{'{{'}}item.formatted_address}}',
-            customTemplate: '&lt;img width="18px" height="18px" :src="avatar_url"/>&lt;span>{{'{{'}}item.login}}&lt;/span>'
+            customTemplate: '&lt;img width="18px" height="18px" :src="item.avatar_url"/>&lt;span>{{'{{'}}item.login}}&lt;/span>'
           }
         },
         methods: {
-          googleCallback(items, targetVM) {
-            const that = targetVM;
-            that.reset()
-            that.value = items.formatted_address
+          googleCallback(item) {
+            return item.formatted_address
           },
-          githubCallback(items) {
-            window.open(items.html_url, '_blank')
+          githubCallback(item) {
+            window.open(item.html_url, '_blank')
+            return item.login
           }
         }
       }
@@ -127,8 +118,14 @@
       <div>
         <p>on-hit</p>
         <p><code>Function</code></p>
-        <p></p>
-        <p>A callback function when you click or hit return on an item.</p>
+        <p><code>function(item){ return item }</code></p>
+        <p>A callback function when you hit on an item. Must return the value to asign to the input after selecting.</p>
+      </div>
+      <div>
+        <p>type</p>
+        <p><code>String</code></p>
+        <p><code>text</code></p>
+        <p>Input type. Not dinamic (is set once, can't be changed later).</p>
       </div>
       <div>
         <p>template</p>
@@ -137,7 +134,7 @@
         <p>Used to render every suggestion. Handler:<code>item</code>. The item can be whatever (e.g. <code>string</code>/<code>array</code>/<code>object</code>)</p>
       </div>
     </doc-table>
-  </div>
+  </doc-section>
 </template>
 
 <script>
@@ -163,12 +160,12 @@ export default {
     }
   },
   methods: {
-    googleCallback (items, targetVM) {
-      targetVM.reset()
-      targetVM.value = items.formatted_address
+    googleCallback (item) {
+      return item.formatted_address
     },
-    githubCallback (items) {
-      window.open(items.html_url, '_blank')
+    githubCallback (item) {
+      window.open(item.html_url, '_blank')
+      return item.login
     }
   }
 }

@@ -1,10 +1,10 @@
 <template>
-  <doc-section id="datepicker" name="***Datepicker">
+  <doc-section id="datepicker" name="Datepicker">
     <div class="bs-example">
       <p>
         <pre>Selected date is: {{dateString}}</pre>
       </p>
-      <datepicker ref="dp" v-model="date" :disabled-days-of-week="disabled" :format="format" :clear-button="clear" :placeholder="placeholder" width="370px"></datepicker>
+      <datepicker ref="dp" v-model="date" :name="name" :disabled-days-of-week="disabled" :format="format" :clear-button="clear" :placeholder="placeholder" width="370px"></datepicker>
       <h4>Disabled days of week</h4>
 
       <v-select multiple v-model="disabled" :options="[0,1,2,3,4,5,6]"></v-select>
@@ -40,6 +40,12 @@
         <p>The date format, combination of d, dd, M, MM, MMM, MMMM, yyyy.</p>
       </div>
       <div>
+        <p>name</p>
+        <p><code>String</code></p>
+        <p></p>
+        <p>Name to put on the input field</p>
+      </div>
+      <div>
         <p>placeholder</p>
         <p><code>String</code></p>
         <p></p>
@@ -64,8 +70,14 @@
         <p>The icon font used for arrows. Can be 'glyphicon' or 'fa' (Font Awesome)</p>
       </div>
     </doc-table>
-  </div>
-  <div></div>
+    <doc-table type="Events">
+      <div>
+        <p>input</p>
+        <p>(<code>value:string</code>)</p>
+        <p>Return the selected value.</p>
+      </div>
+    </doc-table>
+  </doc-section>
 </template>
 
 <script>
